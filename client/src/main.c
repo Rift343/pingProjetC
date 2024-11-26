@@ -74,7 +74,13 @@ int recvTCP(int sock,void * msg, int sizeMsg){
 }
 
 
-
+typedef struct structEnvoi
+{
+    char uuidPlayer[64];
+    int x;
+    int y;
+    int action;
+}structEnvoi;
 
 
 
@@ -138,14 +144,19 @@ int main(int argc, char *argv[]) {
    gettimeofday(&begin, NULL);
   while (1)
   {
-    int msg = 1;
+    structEnvoi structTCP;
+    char placeholderuuid[64] = "btr-265-verv-ver";
+    structTCP.action = 1;
+    structTCP.x = 0;
+    structTCP.y = 1;
+    strcpy(structTCP.uuidPlayer,placeholderuuid);
     gettimeofday(&start, NULL);
-    if (sendTCP(ds,&msg,sizeof(int)))
+    if (sendTCP(ds,&structTCP,sizeof(structTCP)))
     {
         close(ds);
         exit(EXIT_FAILURE);
     }
-    if (recvTCP(ds,&msg,sizeof(int)))
+    if (recvTCP(ds,&structTCP,sizeof(structTCP)))
     {
         close(ds);
         exit(EXIT_FAILURE);

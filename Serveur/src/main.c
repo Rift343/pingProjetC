@@ -10,6 +10,13 @@
 
 /* Programme serveur */
 
+typedef struct structEnvoi
+{
+    char uuidPlayer[64];
+    int x;
+    int y;
+    int action;
+}structEnvoi;
 
 
 int sendTCP(int sock,void * msg, int sizeMsg){
@@ -81,11 +88,11 @@ void * thread_serv(void * param)
   int taille;
   printf("debut de recvTCP\n"); 
 
-   int buffer;
+   structEnvoi buffer;
    while (1)
    {
     /* code */
-        taille = recvTCP(param_serv->socketClient,&buffer,sizeof(int));
+        taille = recvTCP(param_serv->socketClient,&buffer,sizeof(structEnvoi));
         if (taille == -1)
         {
             perror("revc error");
@@ -94,8 +101,13 @@ void * thread_serv(void * param)
             pthread_exit(NULL);
         }
         //printf("recvTCP 2 fini\n");
-        
-        if(sendTCP(param_serv->socketClient,&buffer,sizeof(int))==-1){
+        printf("uuid :%s\n", buffer.uuidPlayer);
+        //ça devrait simuler une temps de calcul
+        for (int i = 0; i < 513; i++)
+        {
+         //toujour de la similation
+        }
+        if(sendTCP(param_serv->socketClient,&buffer,sizeof(structEnvoi))==-1){
             perror("send error");
             close(param_serv->socketClient);
             free(param_serv);
